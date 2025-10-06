@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PigFinance", "PigFinance.csproj", "{7EECB973-B96A-4C90-96E2-747A4EA0F932}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PigFinance.API", "..\PigFinance.API\PigFinance.API.csproj", "{77ADA408-03A2-40DB-9B5A-9F1C31E31BBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EECB973-B96A-4C90-96E2-747A4EA0F932}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EECB973-B96A-4C90-96E2-747A4EA0F932}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EECB973-B96A-4C90-96E2-747A4EA0F932}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EECB973-B96A-4C90-96E2-747A4EA0F932}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77ADA408-03A2-40DB-9B5A-9F1C31E31BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77ADA408-03A2-40DB-9B5A-9F1C31E31BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77ADA408-03A2-40DB-9B5A-9F1C31E31BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77ADA408-03A2-40DB-9B5A-9F1C31E31BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E3C12D51-B02C-4128-B990-BDBE1F9578AF}
+	EndGlobalSection
+EndGlobal
