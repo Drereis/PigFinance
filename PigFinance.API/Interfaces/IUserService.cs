@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PigFinance.API.Services
 {
-    public interface IUsuarioService
+    public interface IUserService
     {
 
         IEnumerable<Usuario> GetAll();
