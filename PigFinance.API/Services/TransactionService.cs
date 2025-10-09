@@ -1,5 +1,5 @@
-﻿using PigFinance.API.Interfaces;
-using PigFinance.API.Models;
+﻿using PigFinance.API.Models;
+using PigFinance.PigFinance.API.Interfaces.IServices;
 
 namespace PigFinance.API.Services
 {
@@ -12,8 +12,8 @@ namespace PigFinance.API.Services
         private static List<Transaction> _transactions = new List<Transaction>
         {
           
-            new Transaction { Id = 1, Descricao = "Salário Mensal", Amount = 3500.00m, Date = DateTime.Now.AddDays(-5), CategoriaId = 1 }, 
-            new Transaction { Id = 2, Descricao = "Aluguel", Amount = -1200.00m, Date = DateTime.Now.AddDays(-4), CategoriaId = 2 } 
+            new Transaction { Id = 1, Descricao = "Salário Mensal", Amount = 3500.00m, Data = DateTime.Now.AddDays(-5), CategoriaId = 1 }, 
+            new Transaction { Id = 2, Descricao = "Aluguel", Amount = -1200.00m, Data = DateTime.Now.AddDays(-4), CategoriaId = 2 } 
         };
 
         public TransactionService(ICategoryService categoryService)
@@ -26,7 +26,7 @@ namespace PigFinance.API.Services
         {
             if (transaction != null)
             {
-                transaction.Categoria = _categoryService.GetById(transaction.CategoriaId);
+                transaction.TipoCategoria = _categoryService.GetById(transaction.CategoriaId);
             }
         }
 
@@ -47,14 +47,14 @@ namespace PigFinance.API.Services
         public decimal GetBalanceByPeriod(DateTime startDate, DateTime endDate)
         {
             return _transactions
-                .Where(t => t.Date >= startDate && t.Date <= endDate)
+                .Where(t => t.Data >= startDate && t.Data <= endDate)
                 .Sum(t => t.Amount);
         }
 
         public IEnumerable<Transaction> GetByPeriod(DateTime startDate, DateTime endDate)
         {
             var transactionsInPeriod = _transactions
-                .Where(t => t.Date >= startDate && t.Date <= endDate)
+                .Where(t => t.Data >= startDate && t.Data <= endDate)
                 .ToList();
 
             foreach (var t in transactionsInPeriod)

@@ -3,15 +3,15 @@ using PigFinance.API.Models;
 using PigFinance.API.Services;
 using System.Net.Mime; 
 
-namespace PigFinance.API.Controllers
+namespace PigFinance.PigFinance.API.Interfaces.IServices
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsuariosController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IUsuarioService _service;
+        private readonly IUserService _service;
 
-        public UsuariosController(IUsuarioService service)
+        public UserController(IUserService service)
         {
             _service = service;
         }

@@ -1,7 +1,7 @@
 ﻿using PigFinance.API.Models;
 using System.Collections.Generic;
 
-namespace PigFinance.API.Services
+namespace PigFinance.PigFinance.API.Interfaces.IServices
 {
     public interface IUserService
     {

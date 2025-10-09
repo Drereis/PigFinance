@@ -1,6 +1,6 @@
 ﻿using PigFinance.API.Models;
 
-namespace PigFinance.API.Interfaces
+namespace PigFinance.PigFinance.API.Interfaces.IServices
 {
     public interface ICategoryService
     {
