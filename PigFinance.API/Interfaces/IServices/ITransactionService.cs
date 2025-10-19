@@ -1,17 +1,16 @@
 ﻿using PigFinance.API.Models;
+using System.Collections.Generic;
 
-namespace PigFinance.PigFinance.API.Interfaces.IServices
+namespace PigFinance.API.Services
 {
     public interface ITransactionService
     {
-        IEnumerable<Transaction> GetAll();
-        decimal GetTotalBalance();
-            
-        decimal GetBalanceByPeriod(DateTime startDate, DateTime endDate);
-
-        IEnumerable<Transaction> GetByPeriod(DateTime startDate, DateTime endDate);
-        Transaction? GetById(int id);
-        Transaction Add(Transaction transaction);
-        void Delete(int id);
+        IEnumerable<Transaction> GetAll(int usuarioId);
+        decimal GetTotalBalance(int usuarioId);
+        decimal GetBalanceByPeriod(DateTime startDate, DateTime endDate, int usuarioId);
+        IEnumerable<Transaction> GetByPeriod(DateTime startDate, DateTime endDate, int usuarioId);
+        Transaction? GetById(int id, int usuarioId);
+        Transaction Add(Transaction transacao);
+        void Delete(int id, int usuarioId);
     }
 }

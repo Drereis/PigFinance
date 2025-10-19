@@ -1,93 +1,63 @@
 ﻿using PigFinance.API.Models;
-using PigFinance.PigFinance.API.Interfaces.IServices;
+using PigFinance.API.Services; 
 
 namespace PigFinance.API.Services
 {
     public class TransactionService : ITransactionService
     {
-   
-        private readonly ICategoryService _categoryService;
-
-     
-        private static List<Transaction> _transactions = new List<Transaction>
+        private static List<Transaction> _transacoes = new List<Transaction>
         {
-          
-            new Transaction { Id = 1, Descricao = "Salário Mensal", Amount = 3500.00m, Data = DateTime.Now.AddDays(-5), CategoriaId = 1 }, 
-            new Transaction { Id = 2, Descricao = "Aluguel", Amount = -1200.00m, Data = DateTime.Now.AddDays(-4), CategoriaId = 2 } 
+            new Transaction { Id = 1, Descricao = "Salário Mensal", Valor = 3500.00m, Data = DateTime.Now.AddDays(-5), UsuarioId = 1, Categoria = TipoCategoria.Outros },
+            new Transaction { Id = 2, Descricao = "Aluguel", Valor = -1200.00m, Data = DateTime.Now.AddDays(-4), UsuarioId = 1, Categoria = TipoCategoria.Moradia }
         };
 
-        public TransactionService(ICategoryService categoryService)
+        public TransactionService()
         {
-            _categoryService = categoryService;
         }
 
-      
-        private void PopulateCategory(Transaction transaction)
+        public decimal GetTotalBalance(int usuarioId)
         {
-            if (transaction != null)
-            {
-                transaction.TipoCategoria = _categoryService.GetById(transaction.CategoriaId);
-            }
+            return _transacoes.Where(t => t.UsuarioId == usuarioId).Sum(t => t.Valor);
         }
 
-        public decimal GetTotalBalance()
+        public IEnumerable<Transaction> GetAll(int usuarioId)
         {
-            return _transactions.Sum(t => t.Amount);
+            return _transacoes.Where(t => t.UsuarioId == usuarioId);
         }
 
-        public IEnumerable<Transaction> GetAll()
+        public decimal GetBalanceByPeriod(DateTime startDate, DateTime endDate, int usuarioId)
         {
-            foreach (var t in _transactions)
-            {
-                PopulateCategory(t);
-            }
-            return _transactions;
+            return _transacoes
+                .Where(t => t.UsuarioId == usuarioId && t.Data >= startDate && t.Data <= endDate)
+                .Sum(t => t.Valor);
         }
 
-        public decimal GetBalanceByPeriod(DateTime startDate, DateTime endDate)
+        public IEnumerable<Transaction> GetByPeriod(DateTime startDate, DateTime endDate, int usuarioId)
         {
-            return _transactions
-                .Where(t => t.Data >= startDate && t.Data <= endDate)
-                .Sum(t => t.Amount);
-        }
-
-        public IEnumerable<Transaction> GetByPeriod(DateTime startDate, DateTime endDate)
-        {
-            var transactionsInPeriod = _transactions
-                .Where(t => t.Data >= startDate && t.Data <= endDate)
+            return _transacoes
+                .Where(t => t.UsuarioId == usuarioId && t.Data >= startDate && t.Data <= endDate)
                 .ToList();
+        }
 
-            foreach (var t in transactionsInPeriod)
+        public Transaction? GetById(int id, int usuarioId)
+        {
+            return _transacoes.FirstOrDefault(t => t.Id == id && t.UsuarioId == usuarioId);
+        }
+
+        public Transaction Add(Transaction transacao)
+        {
+            transacao.Id = _transacoes.Any() ? _transacoes.Max(t => t.Id) + 1 : 1;
+            _transacoes.Add(transacao);
+            return transacao;
+        }
+
+        public void Delete(int id, int usuarioId)
+        {
+            var transacao = _transacoes.FirstOrDefault(t => t.Id == id && t.UsuarioId == usuarioId);
+
+            if (transacao != null)
             {
-                PopulateCategory(t);
-            }
-
-            return transactionsInPeriod;
-        }
-
-        public Transaction? GetById(int id)
-        {
-            var transaction = _transactions.FirstOrDefault(t => t.Id == id);
-            PopulateCategory(transaction); 
-            return transaction;
-        }
-
-        public Transaction Add(Transaction transaction)
-        {
-            transaction.Id = _transactions.Any() ? _transactions.Max(t => t.Id) + 1 : 1;
-
-            _transactions.Add(transaction);
-            PopulateCategory(transaction);
-
-            return transaction;
-        }
-        public void Delete(int id)
-        {
-            var transaction = _transactions.FirstOrDefault(t => t.Id == id);
-
-            if (transaction != null)
-            {
-                _transactions.Remove(transaction);
+                _transacoes.Remove(transacao);
             }
         }
     }

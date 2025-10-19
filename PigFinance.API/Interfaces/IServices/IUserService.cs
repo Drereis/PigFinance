@@ -1,20 +1,13 @@
 ﻿using PigFinance.API.Models;
 using System.Collections.Generic;
 
-namespace PigFinance.PigFinance.API.Interfaces.IServices
+namespace PigFinance.API.Services
 {
-    public interface IUserService
+    public interface IUsuarioService
     {
-
         IEnumerable<Usuario> GetAll();
-
-       
         Usuario? GetById(int id);
-
-        
         Usuario Register(Usuario usuario);
-
-
         Usuario? Authenticate(string email, string senha);
     }
 }

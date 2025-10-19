@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PigFinance.API.Models;
-using PigFinance.PigFinance.API.Interfaces.IServices;
+using PigFinance.API.Services; 
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,28 +8,30 @@ namespace PigFinance.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionsController : ControllerBase
+    public class TransacoesController : ControllerBase 
     {
-        private readonly ITransactionService _service;
+        private readonly ITransactionService _service; 
 
-        public TransactionsController(ITransactionService service)
+        private readonly int _usuarioId = 1;
+
+        public TransacoesController(ITransactionService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Transaction>> Get()
+        public ActionResult<IEnumerable<Transaction>> Get() 
         {
             try
             {
-                var transactions = _service.GetAll();
+                var transacoes = _service.GetAll(_usuarioId);
 
-                if (transactions == null || !transactions.Any())
+                if (transacoes == null || !transacoes.Any())
                 {
                     return NotFound("Nenhuma transação encontrada.");
                 }
 
-                return Ok(transactions);
+                return Ok(transacoes);
             }
             catch (Exception ex)
             {
@@ -37,19 +39,20 @@ namespace PigFinance.API.Controllers
                 return StatusCode(500, "Ocorreu um erro interno ao listar as transações.");
             }
         }
+
         [HttpGet("{id}")]
-        public ActionResult<Transaction> Get(int id)
+        public ActionResult<Transaction> Get(int id) 
         {
             try
             {
-                var transaction = _service.GetById(id);
+                var transacao = _service.GetById(id, _usuarioId);
 
-                if (transaction == null)
+                if (transacao == null)
                 {
                     return NotFound($"Transação com ID {id} não encontrada.");
                 }
 
-                return Ok(transaction);
+                return Ok(transacao);
             }
             catch (Exception ex)
             {
@@ -63,7 +66,7 @@ namespace PigFinance.API.Controllers
         {
             try
             {
-                decimal balance = _service.GetTotalBalance();
+                decimal balance = _service.GetTotalBalance(_usuarioId);
                 return Ok(balance);
             }
             catch (Exception ex)
@@ -85,7 +88,7 @@ namespace PigFinance.API.Controllers
                     return BadRequest("A data de início não pode ser maior que a data de fim.");
                 }
 
-                decimal balance = _service.GetBalanceByPeriod(startDate, endDate);
+                decimal balance = _service.GetBalanceByPeriod(startDate, endDate, _usuarioId);
                 return Ok(balance);
             }
             catch (Exception ex)
@@ -96,7 +99,7 @@ namespace PigFinance.API.Controllers
         }
 
         [HttpGet("list-by-period")]
-        public ActionResult<IEnumerable<Transaction>> GetByPeriod(
+        public ActionResult<IEnumerable<Transaction>> GetByPeriod( 
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate)
         {
@@ -107,14 +110,14 @@ namespace PigFinance.API.Controllers
                     return BadRequest("A data de início não pode ser maior que a data de fim.");
                 }
 
-                var transactions = _service.GetByPeriod(startDate, endDate);
+                var transacoes = _service.GetByPeriod(startDate, endDate, _usuarioId);
 
-                if (transactions == null || !transactions.Any())
+                if (transacoes == null || !transacoes.Any())
                 {
                     return NotFound("Nenhuma transação encontrada para o período especificado.");
                 }
 
-                return Ok(transactions);
+                return Ok(transacoes);
             }
             catch (Exception ex)
             {
@@ -123,9 +126,8 @@ namespace PigFinance.API.Controllers
             }
         }
 
-     
         [HttpPost]
-        public ActionResult<Transaction> Post([FromBody] Transaction transaction)
+        public ActionResult<Transaction> Post([FromBody] Transaction transacao) 
         {
             try
             {
@@ -134,9 +136,11 @@ namespace PigFinance.API.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var newTransaction = _service.Add(transaction);
+                transacao.UsuarioId = _usuarioId;
 
-                return CreatedAtAction(nameof(Get), new { id = newTransaction.Id }, newTransaction);
+                var novaTransacao = _service.Add(transacao);
+
+                return CreatedAtAction(nameof(Get), new { id = novaTransacao.Id }, novaTransacao);
             }
             catch (Exception ex)
             {
@@ -144,19 +148,20 @@ namespace PigFinance.API.Controllers
                 return StatusCode(500, "Ocorreu um erro interno ao criar a transação.");
             }
         }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             try
             {
-                var transaction = _service.GetById(id);
+                var transacao = _service.GetById(id, _usuarioId);
 
-                if (transaction == null)
+                if (transacao == null)
                 {
                     return NotFound($"Transação com ID {id} não encontrada.");
                 }
 
-                _service.Delete(id);
+                _service.Delete(id, _usuarioId);
 
                 return NoContent();
             }

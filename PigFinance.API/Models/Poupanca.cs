@@ -16,7 +16,13 @@ namespace PigFinance.API.Models
 
         public decimal ValorAtual { get; set; } = 0.00m; 
 
-        
-        public DateTime DataAlvo { get; set; }
+        public DateTime DataAlvo { get; set; } 
+
+
+        [Required(ErrorMessage = "O proprietário da poupança é obrigatório.")]
+        public int UsuarioId { get; set; }
+        public Usuario? Usuario { get; set; } 
     }
 }
+
+
