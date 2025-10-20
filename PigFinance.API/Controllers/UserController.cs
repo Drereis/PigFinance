@@ -9,9 +9,9 @@ namespace PigFinance.PigFinance.API.Interfaces.IServices
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _service;
+        private readonly IUsuarioService _service;
 
-        public UserController(IUserService service)
+        public UserController(IUsuarioService service)
         {
             _service = service;
         }
